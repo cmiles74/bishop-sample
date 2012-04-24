@@ -1,0 +1,87 @@
+This project provides a sample application that uses the [[https://github.com/tnr-global/bishop][Bishop
+framework]]. Bishop makes it much easier to provide an API for your
+web-service that understands the HTTP semantics.
+
+* What this Application Doesn’t Do
+
+  This is a terrible sample application. It doesn’t really do any of
+  the kinds of things you would do in a real web-service. I wouldn’t
+  model anything you really care about on this sample application.
+
+* What this Application Does
+
+  This application provides the bare-minimum that I need to test the
+  framework between builds and make sure it’s not completely broken.
+
+* Building the Application
+
+  This application depends on snapshot builds of the Bishop framework,
+  mostly because there isn’t anything /but/ snapshots available. What
+  this means to you is that you also need to check out and install the
+  Bishop library itself.
+
+  #+begin_src shell
+  git clone git://github.com/tnr-global/bishop.git
+  cd bishop
+  lein install
+  #+end_src
+
+  With that done, you can checkout this project.
+
+  #+begin_src shell
+  git clone git://github.com/tnr-global/bishop-sample.git
+  cd bishop-sample
+  #+end_src
+
+  But don’t build it yet! You’ll need to tell Leiningen that you’re
+  okay using snapshots of dependent libraries.
+
+  #+begin_src shell
+  export LEIN_SNAPSHOTS_IN_RELEASE=true
+  lein uberjar
+  ...watch Leiningen build...
+  java -jar bishop-sample-1.0-standalone.jar
+  #+end_src
+
+* Interacting with this Application
+
+  Once built, you can use “[[http://curl.haxx.se/][curl]]” to test the application from the
+  command line.
+
+  #+begin_src shell
+  $ curl -i localhost:3000/hello/miles                                                                                                             [11:10:56]
+  HTTP/1.1 200 OK
+  Date: Tue, 24 Apr 2012 15:11:02 GMT
+  Vary: accept
+  Content-Length: 77
+  Server: Jetty(6.1.x)
+
+  <html><body><p>Hello miles! at Tue Apr 24 11:11:02 EDT
+  2012</p></body></html>
+
+  $ curl -i localhost:3000/hello/miles -H "Accept: text/XML"                                                                                       [11:11:02]
+  HTTP/1.1 200 OK
+  Date: Tue, 24 Apr 2012 15:11:37 GMT
+  Vary: accept
+  Content-Length: 76Server: Jetty(6.1.x)
+
+  <message><text>Hello miles at Tue Apr 24 11:11:37 EDT
+  2012!</text></message>
+
+  $ curl -i localhost:3000/error                                                                                                                   [11:11:37]
+  HTTP/1.1 500 Internal Server Error
+  Date: Tue, 24 Apr 2012 15:12:01 GMT
+  Vary: accept
+  Transfer-Encoding: chunkedServer: Jetty(6.1.x)
+
+  An error occurred
+
+  $ curl -i localhost:3000/halt
+  HTTP/1.1 403 Forbidden
+  Date: Tue, 24 Apr 2012 15:12:05 GMT
+  Vary: accept
+  Content-Length: 0
+  Server: Jetty(6.1.x)
+  #+end_src
+
+  Exciting, isn’t it!
