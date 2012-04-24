@@ -20,7 +20,7 @@ web-service that understands the HTTP semantics.
   this means to you is that you also need to check out and install the
   Bishop library itself.
 
-  #+BEGIN_SRC clojure
+  #+BEGIN_SRC shell
   git clone git://github.com/tnr-global/bishop.git
   cd bishop
   lein install
@@ -28,27 +28,27 @@ web-service that understands the HTTP semantics.
 
   With that done, you can checkout this project.
 
-  #+begin_src clojure
+  #+BEGIN_SRC shell
   git clone git://github.com/tnr-global/bishop-sample.git
   cd bishop-sample
-  #+end_src
+  #+END_SRC
 
   But don’t build it yet! You’ll need to tell Leiningen that you’re
   okay using snapshots of dependent libraries.
 
-  #+begin_src clojure
+  #+BEGIN_SRC shell
   export LEIN_SNAPSHOTS_IN_RELEASE=true
   lein uberjar
   ...watch Leiningen build...
   java -jar bishop-sample-1.0-standalone.jar
-  #+end_src
+  #+END_SRC
 
 * Interacting with this Application
 
   Once built, you can use “[[http://curl.haxx.se/][curl]]” to test the application from the
   command line.
 
-  #+begin_src clojure
+  #+BEGIN_SRC shell
   $ curl -i localhost:3000/hello/miles                                                                                                             [11:10:56]
   HTTP/1.1 200 OK
   Date: Tue, 24 Apr 2012 15:11:02 GMT
@@ -82,6 +82,6 @@ web-service that understands the HTTP semantics.
   Vary: accept
   Content-Length: 0
   Server: Jetty(6.1.x)
-  #+end_src
+  #+END_SRC
 
   Exciting, isn’t it!
