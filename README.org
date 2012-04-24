@@ -82,6 +82,15 @@ web-service that understands the HTTP semantics.
   Vary: accept
   Content-Length: 0
   Server: Jetty(6.1.x)
+
+  $ curl -i localhost:3000/what                                                                                                                     [11:33:23]
+  HTTP/1.1 200 OK
+  Date: Tue, 24 Apr 2012 15:33:27 GMT
+  Vary: accept
+  Content-Length: 13
+  Server: Jetty(6.1.x)
+
+  What?! What?!
   #+END_SRC
 
   Exciting, isn’t it!
