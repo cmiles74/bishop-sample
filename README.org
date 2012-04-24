@@ -20,11 +20,11 @@ web-service that understands the HTTP semantics.
   this means to you is that you also need to check out and install the
   Bishop library itself.
 
-  #+begin_src clojure
+  #+BEGIN_SRC clojure
   git clone git://github.com/tnr-global/bishop.git
   cd bishop
   lein install
-  #+end_src
+  #+END_SRC
 
   With that done, you can checkout this project.
 
