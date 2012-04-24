@@ -28,8 +28,7 @@
 ;; defines a resource that will handle any un-mapped URI request
 (def catchall
   (bishop/resource
-   {"text/html" (fn [request]
-                  (str "What? What?!"))}))
+   {"text/html" (ring-utils/response "What?! What?!")}))
 
 ;; creates a simple Bishop application that routes incoming requests
 ;; to "/hello" to our hello-resource function
