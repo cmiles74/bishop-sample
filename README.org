@@ -57,9 +57,9 @@ list.
 
 ** Updating a To-Do Item
 
-   #+BEGIN_SRC shell
+   #+BEGIN_SRC org
    $ curl -v http://localhost:3000/todos/1 -H 'Content-Type: application/json' \
-     =-=XPUT -d '{
+     -XPUT -d '{
       "title" : "More creative writing",
        "description" : "Write more blog posts"}'
 
