@@ -76,9 +76,7 @@
 
            ;; update the requested to-do item
            (= :put (:request-method request))
-           (let [id (if (:id (:path-info request))
-                      (Integer/parseInt (:id (:path-info request)))
-                      (Integer/parseInt (last (string/split (:uri request) "/"))))
+           (let [id (Integer/parseInt (:id (:path-info request)))
                  todo-in (parse-string (slurp (:body request)) true)]
              (generate-string
               (add-resource-links todo-url (app/todo-update id todo-in))))))})}
