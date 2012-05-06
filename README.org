@@ -6,28 +6,11 @@ list.
 
 * Building the Application
 
-  This application depends on snapshot builds of the Bishop framework,
-  mostly because there isn’t anything /but/ snapshots available. What
-  this means to you is that you also need to check out and install the
-  Bishop library itself.
-
-  #+BEGIN_SRC shell
-  git clone git://github.com/tnr-global/bishop.git
-  cd bishop
-  lein install
-  #+END_SRC
-
-  With that done, you can checkout this project.
+  You can check-out the project and the build it.
 
   #+BEGIN_SRC shell
   git clone git://github.com/tnr-global/bishop-sample.git
   cd bishop-sample
-  #+END_SRC
-
-  But don’t build it yet! You’ll need to tell Leiningen that you’re
-  okay using snapshots of dependent libraries.
-
-  #+BEGIN_SRC shell
   export LEIN_SNAPSHOTS_IN_RELEASE=true
   lein uberjar
   ...watch Leiningen build...
