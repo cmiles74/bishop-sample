@@ -1,5 +1,5 @@
 This project provides a sample application that uses the [[https://github.com/tnr-global/bishop][Bishop
-framework]]. Bishop makes it much easier to provide an API for your
+library]]. Bishop makes it much easier to provide an API for your
 web-service that understands the HTTP semantics. This sample
 application provides a simple web-service that lets you manage a to-do
 list.
