@@ -58,7 +58,7 @@ list.
 ** Updating a To-Do Item
 
    #+BEGIN_SRC shell
-   $ curl -v http://localhost:3000/todos/1 -H 'Content-Type: application/json' \
+   $ curl -v http://localhost:3000/todos/1 -H 'Content-Type: application/json'
      -XPUT -d '{
       "title" : "More creative writing",
        "description" : "Write more blog posts"}'
@@ -76,7 +76,7 @@ list.
 ** Adding A New To-Do Item
 
    #+BEGIN_SRC shell
-   $ curl -i http://localhost:3000/todos -H 'Content-Type: application/json' \
+   $ curl -i http://localhost:3000/todos -H 'Content-Type: application/json'
      -XPOST -d '{
       "title" : "Work on web service",
       "description" : "Work on your web service error handling"}'
