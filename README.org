@@ -1,17 +1,8 @@
 This project provides a sample application that uses the [[https://github.com/tnr-global/bishop][Bishop
 framework]]. Bishop makes it much easier to provide an API for your
-web-service that understands the HTTP semantics.
-
-* What this Application Doesn’t Do
-
-  This is a terrible sample application. It doesn’t really do any of
-  the kinds of things you would do in a real web-service. I wouldn’t
-  model anything you really care about on this sample application.
-
-* What this Application Does
-
-  This application provides the bare-minimum that I need to test the
-  framework between builds and make sure it’s not completely broken.
+web-service that understands the HTTP semantics. This sample
+application provides a simple web-service that lets you manage a to-do
+list.
 
 * Building the Application
 
@@ -43,54 +34,83 @@ web-service that understands the HTTP semantics.
   java -jar bishop-sample-1.0-standalone.jar
   #+END_SRC
 
-* Interacting with this Application
+* Sample Transactions
 
-  Once built, you can use “[[http://curl.haxx.se/][curl]]” to test the application from the
-  command line.
+  Once you have the application built and running, it will respond to
+  the standard created, update and delete requests. Examples of these
+  requests are detailed below.
 
-  #+BEGIN_SRC shell
-  $ curl -i localhost:3000/hello/miles                                                                                                             [11:10:56]
-  HTTP/1.1 200 OK
-  Date: Tue, 24 Apr 2012 15:11:02 GMT
-  Vary: accept
-  Content-Length: 77
-  Server: Jetty(6.1.x)
+** Listing All To-Do Items
 
-  <html><body><p>Hello miles! at Tue Apr 24 11:11:02 EDT
-  2012</p></body></html>
+   #+BEGIN_SRC shell
+   $ curl -i http://localhost:3000/todos
+   HTTP/1.1 200 OK
+   Date: Sun, 06 May 2012 15:03:54 GMT
+   Vary: accept
+   Last-Modified: Sun, 06 May 2012 15:03:52 UTC
+   Content-Length: 133
+   Server: Jetty(6.1.x)
 
-  $ curl -i localhost:3000/hello/miles -H "Accept: text/XML"                                                                                       [11:11:02]
-  HTTP/1.1 200 OK
-  Date: Tue, 24 Apr 2012 15:11:37 GMT
-  Vary: accept
-  Content-Length: 76Server: Jetty(6.1.x)
+   [{"_links":{"self":"todos/1"},"id":1,"title":"Your first to-do",
+   "description":"Write more to-dos!","created":"2012-05-06T15:03:52Z"}]
+   #+END_SRC
 
-  <message><text>Hello miles at Tue Apr 24 11:11:37 EDT
-  2012!</text></message>
+** Updating a To-Do Item
 
-  $ curl -i localhost:3000/error                                                                                                                   [11:11:37]
-  HTTP/1.1 500 Internal Server Error
-  Date: Tue, 24 Apr 2012 15:12:01 GMT
-  Vary: accept
-  Transfer-Encoding: chunkedServer: Jetty(6.1.x)
+   #+BEGIN_SRC shell
+   $ curl -v http://localhost:3000/todos/1 -XPUT -d '{ \
+      "title" : "More creative writing", \
+       "description" : "Write more blog posts"}' \
+     -H 'Content-Type: application/json'
 
-  An error occurred
+   HTTP/1.1 200 OK
+   Date: Sun, 06 May 2012 15:13:21 GMT
+   Vary: accept
+   Content-Length: 141
+   Server: Jetty(6.1.x)
 
-  $ curl -i localhost:3000/halt
-  HTTP/1.1 403 Forbidden
-  Date: Tue, 24 Apr 2012 15:12:05 GMT
-  Vary: accept
-  Content-Length: 0
-  Server: Jetty(6.1.x)
+   {"_links":{"self":"todos/1/1"},"id":1,"title":"More creative writing",
+   "description":"Write more blog posts","created":"2012-05-06T15:03:52Z"}
+   #+END_SRC
 
-  $ curl -i localhost:3000/what                                                                                                                     [11:33:23]
-  HTTP/1.1 200 OK
-  Date: Tue, 24 Apr 2012 15:33:27 GMT
-  Vary: accept
-  Content-Length: 13
-  Server: Jetty(6.1.x)
+** Adding A New To-Do Item
 
-  What?! What?!
-  #+END_SRC
+   #+BEGIN_SRC shell
+   $ curl -i http://localhost:3000/todos -XPOST -d '{ \
+      "title" : "Work on web service", \
+      "description" : "Work on your web service error handling"}' \
+     -H 'Content-Type: application/json'
 
-  Exciting, isn’t it!
+   HTTP/1.1 303 See Other
+   Date: Sun, 06 May 2012 15:06:53 GMT
+   Vary: accept
+   Location: todos/2
+   Debug: N11, switching to PUT
+   Content-Length: 0
+   Server: Jetty(6.1.x)
+   #+END_SRC
+
+** Retrieving a To-Do Item
+
+   #+BEGIN_SRC shell
+   $ curl -i http://localhost:3000/todos/2
+
+   HTTP/1.1 200 OK
+   Date: Sun, 06 May 2012 15:08:57 GMT
+   Vary: accept
+   ETag: "1336316813540-2"
+   Last-Modified: Sun, 06 May 2012 15:06:53 UTC
+   Content-Length: 157
+   Server: Jetty(6.1.x)
+   #+END_SRC
+
+** Deleting a To-Do Item
+
+   #+BEGIN_SRC shell
+   $ curl -i http://localhost:3000/todos/2 -XDELETE
+
+   HTTP/1.1 204 No Content
+   Date: Sun, 06 May 2012 15:11:01 GMT
+   Vary: accept
+   Server: Jetty(6.1.x)
+   #+END_SRC
