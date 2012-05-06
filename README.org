@@ -57,9 +57,12 @@ list.
 
 ** Updating a To-Do Item
 
+   Note that you need a dash (“-”) before the “XPOST”. I couldn’t get
+   it to look right in this README with the GitHub parser.
+
    #+BEGIN_SRC org
    $ curl -v http://localhost:3000/todos/1 -H 'Content-Type: application/json' \
-     -XPUT -d '{
+     XPUT -d '{
       "title" : "More creative writing",
        "description" : "Write more blog posts"}'
 
@@ -75,9 +78,12 @@ list.
 
 ** Adding A New To-Do Item
 
+   Note that you need a dash (“-”) before the “XPOST”. I couldn’t get
+   it to look right in this README with the GitHub parser.
+
    #+BEGIN_SRC shell
-   $ curl -i http://localhost:3000/todos -H 'Content-Type: application/json'
-     -XPOST -d '{
+   $ curl -i http://localhost:3000/todos -H 'Content-Type: application/json' \
+     XPOST -d '{
       "title" : "Work on web service",
       "description" : "Work on your web service error handling"}'
 
