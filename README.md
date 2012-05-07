@@ -78,12 +78,16 @@ Server: Jetty(6.1.x)
 $ curl -i http://localhost:3000/todos/2
 
 HTTP/1.1 200 OK
-Date: Sun, 06 May 2012 15:08:57 GMT
+Date: Mon, 07 May 2012 12:12:33 GMT
 Vary: accept
-ETag: "1336316813540-2"
-Last-Modified: Sun, 06 May 2012 15:06:53 UTC
+ETag: "1336392745012-2"
+Last-Modified: Mon, 07 May 2012 12:12:25 UTC
 Content-Length: 157
 Server: Jetty(6.1.x)
+
+{"_links":{"self":"todos/2/2"},
+"description":"Work on your web service error handling",
+"title":"Work on web service","id":2,"created":"2012-05-07T12:12:25Z"}
 ```
 
 ### Deleting a To-Do Item
