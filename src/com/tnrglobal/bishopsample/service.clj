@@ -116,5 +116,5 @@
                        (str (.getTime (app/todo-modified id)) "-" id)))}))
 
 (def routes
-  {["todos"] todo-group-resource
-   ["todos" :id] todo-item-resource})
+  {[URI-BASE] todo-group-resource
+   [URI-BASE :id] todo-item-resource})
