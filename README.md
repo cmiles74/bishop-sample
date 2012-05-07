@@ -40,7 +40,7 @@ Server: Jetty(6.1.x)
 ### Updating a To-Do Item
 
 ```
-$ curl -v http://localhost:3000/todos/1 -H 'Content-Type: application/json' \
+$ curl -i http://localhost:3000/todos/1 -H 'Content-Type: application/json' \
 -XPUT -d '{
 "title" : "More creative writing",
 "description" : "Write more blog posts"}'
@@ -51,7 +51,7 @@ Vary: accept
 Content-Length: 141
 Server: Jetty(6.1.x)
 
-{"_links":{"self":"todos/1/1"},"id":1,"title":"More creative writing",
+{"_links":{"self":"todos/1"},"id":1,"title":"More creative writing",
 "description":"Write more blog posts","created":"2012-05-06T15:03:52Z"}
 ```
 
@@ -85,7 +85,7 @@ Last-Modified: Mon, 07 May 2012 12:12:25 UTC
 Content-Length: 157
 Server: Jetty(6.1.x)
 
-{"_links":{"self":"todos/2/2"},
+{"_links":{"self":"todos/2"},
 "description":"Work on your web service error handling",
 "title":"Work on web service","id":2,"created":"2012-05-07T12:12:25Z"}
 ```

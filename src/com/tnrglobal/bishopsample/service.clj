@@ -66,20 +66,19 @@
       {:body
 
        ;; parse out the provided to-do ID
-       (let [id (Integer/parseInt (:id (:path-info request)))
-             todo-url (str URI-BASE "/" id)]
+       (let [id (Integer/parseInt (:id (:path-info request)))]
          (cond
 
            ;; return the requested to-do item
            (= :get (:request-method request))
-           (generate-string (add-resource-links todo-url (app/todo-fetch id)))
+           (generate-string (add-resource-links URI-BASE (app/todo-fetch id)))
 
            ;; update the requested to-do item
            (= :put (:request-method request))
            (let [id (Integer/parseInt (:id (:path-info request)))
                  todo-in (parse-string (slurp (:body request)) true)]
              (generate-string
-              (add-resource-links todo-url (app/todo-update id todo-in))))))})}
+              (add-resource-links URI-BASE (app/todo-update id todo-in))))))})}
 
    {;; the request methods supported by this resource
     :allowed-methods (fn [request] [:get :head :put :delete])
