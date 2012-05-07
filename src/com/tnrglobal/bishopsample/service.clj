@@ -4,15 +4,23 @@
 (ns com.tnrglobal.bishopsample.service
   (:gen-class)
   (:use [cheshire.core]
+        [hiccup.core]
+        [hiccup.page]
+        [hiccup.element]
         [clojure.tools.logging])
   (:require [com.tnrglobal.bishopsample.application :as app]
             [com.tnrglobal.bishop.core :as bishop]
             [ring.util.response :as ring-utils]
             [clojure.string :as string])
-  (:import [java.util Date]))
+  (:import [java.util Date]
+           [java.text SimpleDateFormat]))
 
 ;; the base url for our resource
 (def URI-BASE "todos")
+
+;; date format for HTML output
+(def DATE-FORMAT (SimpleDateFormat.
+                       "MM/dd/yyyy, HH:mm:ss"))
 
 (defn add-resource-links
   "Adds resource links to the provided to-do item."
@@ -20,14 +28,25 @@
   (merge todo
          {:_links {:self (str url "/" (:id todo))}}))
 
+(defn todo-short-html
+  [todo]
+  [:li [:h4 (link-to (:self (:_links todo)) (:title todo))] (:description todo)])
+
+(defn todo-long-html
+  [todo]
+  [:span
+   [:h1 (link-to (:self (:_links todo)) (:title todo))]
+   [:p (str "Created at " (.format DATE-FORMAT (:created todo)))]
+   [:p (:description todo)]])
+
 ;; this resource returns a list of all to-do items in response to a
 ;; GET request, if provided a POST or PUT request than the data
 ;; provided is used to create a new to-do item
 (def todo-group-resource
   (bishop/resource
 
-   ;; returns a list of to-do items
-   {"application/json"
+   {;; JSON handler
+    "application/json"
     (fn [request]
       (cond
 
@@ -40,7 +59,16 @@
                (= :put (:request-method request))
                (let [todo-in (parse-string (slurp (:body request)) true)
                      todo (app/todo-add todo-in)]
-                 {:headers {"Location" (str URI-BASE "/" (:id todo))}})))}
+                 {:headers {"Location" (str URI-BASE "/" (:id todo))}})))
+
+    ;; HTML handler
+    "text/html"
+    (fn [request]
+      {:body (xhtml {:lange "en" }
+                    [:body
+                     [:h1 "To-Do List"]
+                     [:ul (map #(todo-short-html (add-resource-links URI-BASE %))
+                               (app/todos))]])})}
 
    {;; the request methods supported by this resource
     :allowed-methods (fn [request] [:get :head :post :put])
@@ -54,14 +82,15 @@
     ;; we use the modification date on the most recently modified
     ;; to-do item as the last modification date
     :last-modified (fn [request]
-                     (.getTime (app/most-recent-todo-modified)))}))
+                     (app/most-recent-todo-modified))}))
 
 ;; this resource returns a specific to-do item in response to GET
 ;; requests, if provided a PUT request then the data is used to update
 ;; the to-do item
 (def todo-item-resource
   (bishop/resource
-   {"application/json"
+   {;; JSON Handler
+    "application/json"
     (fn [request]
       {:body
 
@@ -78,7 +107,17 @@
            (let [id (Integer/parseInt (:id (:path-info request)))
                  todo-in (parse-string (slurp (:body request)) true)]
              (generate-string
-              (add-resource-links URI-BASE (app/todo-update id todo-in))))))})}
+              (add-resource-links URI-BASE (app/todo-update id todo-in))))))})
+
+    ;; HTML handler
+    "text/html"
+    (fn [request]
+      (let [id (Integer/parseInt (:id (:path-info request)))]
+        {:body
+         (xhtml {:lange "en" }
+                [:body (todo-long-html
+                        (add-resource-links (str "/" URI-BASE)
+                                            (app/todo-fetch id)))])}))}
 
    {;; the request methods supported by this resource
     :allowed-methods (fn [request] [:get :head :put :delete])
@@ -106,9 +145,8 @@
 
     ;; returns the date for the "Last-Modified" header
     :last-modified (fn [request]
-                     (.getTime
-                      (app/todo-modified
-                       (Integer/parseInt (:id (:path-info request))))))
+                     (app/todo-modified
+                      (Integer/parseInt (:id (:path-info request)))))
 
     ;; returns the value for the "ETag" header
     :generate-etag (fn [request]
