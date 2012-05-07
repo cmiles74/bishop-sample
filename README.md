@@ -46,9 +46,9 @@ served out of cache. In this example the client is providing the
 value of the to-do item, since the to-do item hasn't changed they
 match and the page can be safely served from cache.
 
-Using Bishop makes creating a web-service that treats HTTP as a
-first-class application protocol a straightforward and painless
-process. Take a look at the
+Bishop makes creating a web-service that treats HTTP as a first-class
+application protocol a straightforward and painless process. Take a
+look at the
 [sample code](https://github.com/tnr-global/bishop-sample/blob/master/src/com/tnrglobal/bishopsample/service.clj),
 we provide a handful of callback functions and the library handles the
 rest.
