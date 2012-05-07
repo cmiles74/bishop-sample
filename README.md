@@ -40,14 +40,14 @@ Bishop also helps you write a web-service that has predictable caching
 behavior. If you select a to-do item in your web-browser, you'll
 notice that the first request returns a 200 response with the details
 on that item. Subsequent re-loading of the page will cause "304 Not
-Modified" responses to the client, causing the page to be served out
-of cache. In this example the client is providing the "ETag" of the
-to-do item and Bishop compares this against the ETag of the to-do
-item, since they match the item hasn't changed and can be safely
-served from cache.
+Modified" responses to be sent to the client, causing the page to be
+served out of cache. In this example the client is providing the
+"ETag" of the to-do item and Bishop compares this against the current
+value of the to-do item, since the to-do item hasn't changed they
+match and the page can be safely served from cache.
 
-By using Bishop, creating a web-service that treats HTTP as a
-first-class application protocol is a straightforward and painless
+Using Bishop makes creating a web-service that treats HTTP as a
+first-class application protocol a straightforward and painless
 process. Take a look at the
 [sample code](https://github.com/tnr-global/bishop-sample/blob/master/src/com/tnrglobal/bishopsample/service.clj),
 we provide a handful of callback functions and the library handles the
