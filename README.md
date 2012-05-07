@@ -1,8 +1,8 @@
 This project provides a sample application that uses the
 [Bishop library](https://github.com/tnr-global/bishop). Bishop makes
-it much easier to provide an API for your web-service that understands
-the HTTP semantics. This sample application provides a simple
-web-service that lets you manage a to-do list.
+it much easier to provide an API for your web-service that treats HTTP
+as a first-class application layer. This sample application provides a
+simple web-service that lets you manage a to-do list.
 
 ## Building the Application
 
@@ -28,7 +28,7 @@ bare-bones web application that lets you view the list of to-do items
 as well as detail on each item. Once you have the application
 up-and-running, you can view the list at...
 
-> (http://localhost:3000/todos)[http://localhost:3000/todos]
+[http://localhost:3000/todos](http://localhost:3000/todos)
 
 The Bishop library handles content negotiation on behalf of the
 application. It compares the headers provided by the client web
