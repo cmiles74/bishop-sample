@@ -20,8 +20,9 @@ java -jar bishop-sample-1.0-standalone.jar
 
 This application provides a web-service that manages a to-do
 list. This web-service speaks JSON, you can retrieve the list of items
-or add new items with a POST request. Existing to-do items are easily
-updated by making a PUT request to the to-do item's URL with new data.
+with a GET request or add new items with a POST. Existing to-do items
+are easily updated by making a PUT request to the to-do item's URL
+with new data.
 
 In addition to JSON web-service, this application provides a
 bare-bones web application that lets you view the list of to-do items
