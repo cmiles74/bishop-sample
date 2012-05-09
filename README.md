@@ -104,7 +104,6 @@ HTTP/1.1 303 See Other
 Date: Sun, 06 May 2012 15:06:53 GMT
 Vary: accept
 Location: todos/2
-Debug: N11, switching to PUT
 Content-Length: 0
 Server: Jetty(6.1.x)
 ```
