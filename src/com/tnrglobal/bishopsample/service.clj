@@ -76,9 +76,6 @@
     ;; POSTs with new data will be handled like a PUT
     :post-is-create? (fn [request] true)
 
-    ;; temporary resource path for new items
-    :create-path (fn [request] "/pending")
-
     ;; we use the modification date on the most recently modified
     ;; to-do item as the last modification date
     :last-modified (fn [request]
@@ -92,10 +89,11 @@
    {;; JSON Handler
     "application/json"
     (fn [request]
-      {:body
 
-       ;; parse out the provided to-do ID
-       (let [id (Integer/parseInt (:id (:path-info request)))]
+      ;; parse out the provided to-do ID
+      (let [id (Integer/parseInt (:id (:path-info request)))]
+
+        {:body
          (cond
 
            ;; return the requested to-do item
@@ -104,10 +102,9 @@
 
            ;; update the requested to-do item
            (= :put (:request-method request))
-           (let [id (Integer/parseInt (:id (:path-info request)))
-                 todo-in (parse-string (slurp (:body request)) true)]
+           (let [todo-in (parse-string (slurp (:body request)) true)]
              (generate-string
-              (add-resource-links URI-BASE (app/todo-update id todo-in))))))})
+              (add-resource-links URI-BASE (app/todo-update id todo-in)))))}))
 
     ;; HTML handler
     "text/html"
@@ -142,6 +139,11 @@
     :delete-completed? (fn [request]
                          (not (app/id-present?
                                (Integer/parseInt (:id (:path-info request))))))
+
+    ;; makes sure the update doesn't cause a conflict
+    :is-conflict? (fn [request]
+                    (not (app/id-present?
+                          (Integer/parseInt (:id (:path-info request))))))
 
     ;; returns the date for the "Last-Modified" header
     :last-modified (fn [request]
