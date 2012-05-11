@@ -4,21 +4,15 @@
 (ns com.tnrglobal.bishopsample.core
   (:gen-class)
   (:use [ring.adapter.jetty]
-        [ring.middleware.params]
         [clojure.tools.logging])
   (:require [com.tnrglobal.bishop.core :as bishop]
             [com.tnrglobal.bishopsample.service :as service]))
-
-;; we setup our ring application
-(def app
-  (-> (bishop/handler service/routes)
-      (wrap-params)))
 
 (defn main
   "Exposes the main function for bootstrapping the application."
   [& args]
   (info "Hello from Bishop Sample!")
-  (run-jetty app {:port 3000}))
+  (run-jetty (bishop/handler service/routes) {:port 3000}))
 
 (defn -main
   [& args]
