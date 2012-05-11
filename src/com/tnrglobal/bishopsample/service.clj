@@ -20,7 +20,15 @@
 
 ;; date format for HTML output
 (def DATE-FORMAT (SimpleDateFormat.
-                       "MM/dd/yyyy, HH:mm:ss"))
+                  "MM/dd/yyyy, HH:mm:ss"))
+
+(defn parse-id
+  "Parses a String of text into a valid identifier. If the data cannot
+  be parsed then nil is returned."
+  [id]
+  (try (Integer/parseInt id)
+       (catch Exception exception
+         nil)))
 
 (defn add-resource-links
   "Adds resource links to the provided to-do item."
@@ -91,7 +99,7 @@
     (fn [request]
 
       ;; parse out the provided to-do ID
-      (let [id (Integer/parseInt (:id (:path-info request)))]
+      (let [id (parse-id (:id (:path-info request)))]
 
         {:body
          (cond
@@ -109,7 +117,7 @@
     ;; HTML handler
     "text/html"
     (fn [request]
-      (let [id (Integer/parseInt (:id (:path-info request)))]
+      (let [id (parse-id (:id (:path-info request)))]
         {:body
          (xhtml {:lange "en" }
                 [:body (todo-long-html
@@ -121,8 +129,9 @@
 
     ;; verify that we have a todo with the provided id
     :resource-exists? (fn [request]
-                        (app/id-present?
-                         (Integer/parseInt (:id (:path-info request)))))
+                        (and (parse-id (:id (:path-info request)))
+                             (app/id-present?
+                              (parse-id (:id (:path-info request))))))
 
     ;; only JSON data can be used to update a to-do
     :known-content-type? (fn [request]
@@ -133,26 +142,26 @@
     ;; handles deleting a resource
     :delete-resource (fn [request]
                        (app/todo-remove
-                        (Integer/parseInt (:id (:path-info request)))))
+                        (parse-id (:id (:path-info request)))))
 
     ;; confirms the resource was deleted
     :delete-completed? (fn [request]
                          (not (app/id-present?
-                               (Integer/parseInt (:id (:path-info request))))))
+                               (parse-id (:id (:path-info request))))))
 
     ;; makes sure the update doesn't cause a conflict
     :is-conflict? (fn [request]
                     (not (app/id-present?
-                          (Integer/parseInt (:id (:path-info request))))))
+                          (parse-id (:id (:path-info request))))))
 
     ;; returns the date for the "Last-Modified" header
     :last-modified (fn [request]
                      (app/todo-modified
-                      (Integer/parseInt (:id (:path-info request)))))
+                      (parse-id (:id (:path-info request)))))
 
     ;; returns the value for the "ETag" header
     :generate-etag (fn [request]
-                     (let [id (Integer/parseInt (:id (:path-info request)))]
+                     (let [id (parse-id (:id (:path-info request)))]
                        (str (.getTime (app/todo-modified id)) "-" id)))}))
 
 (def routes
