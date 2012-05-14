@@ -5,14 +5,10 @@
   (:use [cheshire.core]
         [hiccup.core]
         [hiccup.page]
-        [hiccup.element]
-        [clojure.tools.logging])
+        [hiccup.element])
   (:require [com.tnrglobal.bishopsample.application :as app]
-            [com.tnrglobal.bishop.core :as bishop]
-            [ring.util.response :as ring-utils]
-            [clojure.string :as string])
-  (:import [java.util Date]
-           [java.text SimpleDateFormat]))
+            [com.tnrglobal.bishop.core :as bishop])
+  (:import [java.text SimpleDateFormat]))
 
 ;; the base url for our resource
 (def URI-BASE "todos")
