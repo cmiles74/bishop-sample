@@ -2,7 +2,6 @@
 ;; A sample Bishop service.
 ;;
 (ns com.tnrglobal.bishopsample.service
-  (:gen-class)
   (:use [cheshire.core]
         [hiccup.core]
         [hiccup.page]
