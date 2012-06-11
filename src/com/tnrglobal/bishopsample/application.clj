@@ -2,15 +2,18 @@
 ;; Functions that provide our sample to-do list application.
 ;;
 (ns com.tnrglobal.bishopsample.application
-  (:import [java.util Date]))
+  (:import [org.joda.time DateTime]))
 
 ;; our to-do list database, we start with one item
 (def DATABASE (ref {1
                     {:id 1
                      :title "Your first to-do"
                      :description "Write more to-dos!"
-                     :created (Date.)
-                     :modified (Date.)}}))
+                     :created (DateTime.)
+                     :modified (DateTime.)}}))
+
+;; the time of the most recent database change
+(def DATABASE-MODIFIED (ref (DateTime.)))
 
 ;; the next available ID
 (def NEXT-ID (ref 1))
@@ -36,12 +39,10 @@
   [id]
   (:modified (@DATABASE id)))
 
-(defn most-recent-todo-modified
-  "Returns the date of the most recently modified to-do item."
+(defn most-recently-modified
+  "Returns the date the database was most recently modified"
   []
-  (:modified (second
-              (first (sort #(compare (:last-modified %2) (:last-modified %1))
-                           @DATABASE)))))
+  @DATABASE-MODIFIED)
 
 (defn id-present?
   "Returns true if the provided ID is present in the database."
@@ -69,9 +70,10 @@
     (let [id (dosync (alter NEXT-ID inc))]
       (dosync
        (alter DATABASE assoc id (merge {:id id
-                                        :created (Date.)
-                                        :modified (Date.)}
-                                       todo)))
+                                        :created (DateTime.)
+                                        :modified (DateTime.)}
+                                       todo))
+       (ref-set DATABASE-MODIFIED (DateTime.)))
 
       ;; return our new to-do item
       (todo-fetch id))))
@@ -83,7 +85,9 @@
   ;; make sure the item exists
   (if (id-present? id)
     (dosync
-     (alter DATABASE dissoc id) true)
+     (alter DATABASE dissoc id)
+     (ref-set DATABASE-MODIFIED (DateTime.))
+     true)
     (throw (Exception. (str "No to-do item found with ID '" id "'")))))
 
 (defn todo-update
@@ -112,12 +116,13 @@
    ;; update the modified date if our items differ
    (let [old-todo (todo-fetch id)
          updated-todo (if (todo-different? old-todo todo)
-                        (assoc todo :modified (Date.))
+                        (assoc todo :modified (DateTime.))
                         todo)]
 
      ;; update our database
      (alter DATABASE assoc id
-            (merge old-todo updated-todo))))
+            (merge old-todo updated-todo))
+     (ref-set DATABASE-MODIFIED (DateTime.))))
 
   ;; return the updated to-do
   (todo-fetch id))

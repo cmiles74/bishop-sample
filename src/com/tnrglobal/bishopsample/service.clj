@@ -2,20 +2,28 @@
 ;; A sample Bishop service.
 ;;
 (ns com.tnrglobal.bishopsample.service
-  (:use [cheshire.core]
+  (:use [cheshire.custom]
         [hiccup.core]
         [hiccup.page]
         [hiccup.element])
   (:require [com.tnrglobal.bishopsample.application :as app]
             [com.tnrglobal.bishop.core :as bishop])
-  (:import [java.text SimpleDateFormat]))
+  (:import [org.joda.time.format DateTimeFormat ISODateTimeFormat]))
 
 ;; the base url for our resource
 (def URI-BASE "todos")
 
+;; ISO8601 DateTime Formatter
+(def FORMAT-8601 (ISODateTimeFormat/dateTime))
+
 ;; date format for HTML output
-(def DATE-FORMAT (SimpleDateFormat.
-                  "MM/dd/yyyy, HH:mm:ss"))
+(def DATE-FORMAT (DateTimeFormat/forPattern "MM/dd/yyyy, HH:mm:ss"))
+
+;; add a JSON encoding function for Joda DateTime objects
+(add-encoder org.joda.time.DateTime
+                      (fn [date-time jsonGenerator]
+                        (.writeString jsonGenerator
+                                      (.print FORMAT-8601 date-time))))
 
 (defn parse-id
   "Parses a String of text into a valid identifier. If the data cannot
@@ -39,7 +47,7 @@
   [todo]
   [:span
    [:h1 (link-to (:self (:_links todo)) (:title todo))]
-   [:p (str "Created at " (.format DATE-FORMAT (:created todo)))]
+   [:p (str "Created at " (.print DATE-FORMAT (:created todo)))]
    [:p (:description todo)]])
 
 ;; this resource returns a list of all to-do items in response to a
@@ -82,7 +90,7 @@
     ;; we use the modification date on the most recently modified
     ;; to-do item as the last modification date
     :last-modified (fn [request]
-                     (app/most-recent-todo-modified))}))
+                     (app/most-recently-modified))}))
 
 ;; this resource returns a specific to-do item in response to GET
 ;; requests, if provided a PUT request then the data is used to update
@@ -157,7 +165,7 @@
     ;; returns the value for the "ETag" header
     :generate-etag (fn [request]
                      (let [id (parse-id (:id (:path-info request)))]
-                       (str (.getTime (app/todo-modified id)) "-" id)))}))
+                       (str (.getMillis (app/todo-modified id)) "-" id)))}))
 
 (def routes
   {[URI-BASE] todo-group-resource
