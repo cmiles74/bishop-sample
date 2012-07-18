@@ -5,7 +5,7 @@
                  [ring/ring-jetty-adapter "1.0.2"]
                  [cheshire "4.0.0"]
                  [hiccup "1.0.0"]
-                 [tnrglobal/bishop "1.0.8"]]
+                 [tnrglobal/bishop "1.1.1"]]
   :dev-dependencies [[swank-clojure/swank-clojure "1.3.3"]]
   :warn-on-reflection true
   :main com.tnrglobal.bishopsample.core)
