@@ -137,20 +137,20 @@
             description ((:form-params request) "description")
 
             ;; fetch the current to-do
-            todo (app/todo-fetch id)]
+            todo (app/todo-fetch id)
 
-        ;; update the to-do
-        (let [updated (app/todo-update id
-                                       (merge todo {:title title
-                                                    :description description}))]
+            ;; update the todo
+            updated (app/todo-update id
+                                     (merge todo {:title title
+                                                  :description description}))]
 
-          ;; return the updated to-do
-          {:body
-           (xhtml {:lange "en" }
-                  [:body (todo-long-html
-                          (add-resource-links (str "/" URI-BASE)
-                                              updated))])
-           :headers {"content-type" "text/html"}})))
+        ;; return the updated to-do
+        {:body
+         (xhtml {:lange "en" }
+                [:body (todo-long-html
+                        (add-resource-links (str "/" URI-BASE)
+                                            updated))])
+         :headers {"content-type" "text/html"}}))
 
     ;; the request methods supported by this resource
     :allowed-methods (fn [request] [:get :head :put :post :delete])
