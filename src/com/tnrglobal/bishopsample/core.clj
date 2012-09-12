@@ -9,13 +9,15 @@
   (:require [com.tnrglobal.bishop.core :as bishop]
             [com.tnrglobal.bishopsample.service :as service]))
 
+(def handler
+  (-> (bishop/handler service/routes)
+      wrap-params))
+
 (defn main
   "Exposes the main function for bootstrapping the application."
   [& args]
   (info "Hello from Bishop Sample!")
-  (run-jetty (-> (bishop/handler service/routes)
-                 wrap-params)
-             {:port 3000}))
+  (run-jetty handler {:port 3000}))
 
 (defn -main
   [& args]
