@@ -4,7 +4,7 @@
                  [ring/ring-jetty-adapter "1.1.5"]
                  [cheshire "4.0.2"]
                  [hiccup "1.0.1"]
-                 [tnrglobal/bishop "1.1.9"]]
+                 [tnrglobal/bishop "1.2.0"]]
   :dev-dependencies [[org.clojure/clojure "1.3.0"]
                      [swank-clojure/swank-clojure "1.3.3"]]
   :warn-on-reflection true
