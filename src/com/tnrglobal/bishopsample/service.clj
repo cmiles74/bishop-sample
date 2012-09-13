@@ -196,6 +196,6 @@
                     (let [id (parse-id (:id (:path-info request)))]
                       (str (.getMillis (app/todo-modified id)) "-" id)))})
 
-(def routes
-  {[URI-BASE] todo-group-resource
-   [URI-BASE :id] todo-item-resource})
+(bishop/defroutes routes
+  [URI-BASE] todo-group-resource
+  [URI-BASE :id] todo-item-resource)

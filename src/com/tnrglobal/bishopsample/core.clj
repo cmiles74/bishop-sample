@@ -10,7 +10,7 @@
             [com.tnrglobal.bishopsample.service :as service]))
 
 (def handler
-  (-> (bishop/handler service/routes)
+  (-> (bishop/handler #'service/routes) ; we want reloading to work for routes
       wrap-params))
 
 (defn main
