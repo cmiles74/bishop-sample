@@ -1,5 +1,5 @@
 This project provides a sample application that uses the
-[Bishop library](https://github.com/tnr-global/bishop). Bishop makes
+[Bishop library](https://github.com/cmiles74/bishop). Bishop makes
 it much easier to provide an API for your web-service that treats HTTP
 as a first-class application layer. This sample application provides a
 simple web-service that lets you manage a to-do list.
@@ -49,7 +49,7 @@ match and the page can be safely served from cache.
 Bishop makes creating a web-service that treats HTTP as a first-class
 application protocol a straightforward and painless process. Take a
 look at the
-[sample code](https://github.com/tnr-global/bishop-sample/blob/master/src/com/tnrglobal/bishopsample/service.clj),
+[sample code](https://github.com/cmiles74/bishop-sample/blob/master/src/com/tnrglobal/bishopsample/service.clj),
 we provide a handful of callback functions and the library handles the
 rest.
 
